@@ -12,3 +12,8 @@ prov = "prov_railway_info"
 city = "city"
 country= "country"
 countrylanguage = "countrylanguage"
+
+# database to table
+coronavirus_database = [daily, area, date]
+train_database = [train, station, prov]
+world_database = [city, country, countrylanguage]

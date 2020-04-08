@@ -8,5 +8,6 @@ blog.log*
 .firebaserc
 database.rules*
 firebase*
-script
+# script
+*.log
 test/
