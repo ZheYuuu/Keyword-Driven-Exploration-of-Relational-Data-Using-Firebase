@@ -68,3 +68,27 @@ def get_station(id):
 def get_prov(id):
     return jsonify(db.child(db_name).child(prov).child(id).get().val())
 
+@bp.route(f"{db_name}/index", methods=['GET'], endpoint='train_index')
+def search():
+    keywords = request.args.get('keyword').split(' ')
+    ref = f"{db_name}/index"
+    mapping = {kw:{} for kw in keywords}
+    entrys = set()
+    for kw in keywords:
+        items = db.child(ref).child(kw).get().val()
+        if not items:
+            return jsonify([])
+        for item in items:
+            tmp = item['table']+'/'+item['pk']
+            entrys.add(tmp)
+            mapping[kw][tmp] = True
+    result = []
+    for entry in entrys:
+        weight = 0
+        for kw in keywords:
+            weight += 1 if entry in mapping[kw] else 0
+        table, pk = entry.split('/')
+        link = f"/api/{entry}.json"
+        result.append({"table":table, "pk":pk, "_link":link, "weight":weight})
+    result = sorted(result, key=lambda d: d['weight'], reverse=True)
+    return jsonify(result)

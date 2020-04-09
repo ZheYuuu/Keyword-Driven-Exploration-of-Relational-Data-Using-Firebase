@@ -3,6 +3,7 @@ from app import create_app, db
 from tests import TestConfig, TestMixin
 from const import daily, area, date
 import json
+import urllib
 
 
 class CoronavirusTestCase(TestMixin):
@@ -35,3 +36,13 @@ class CoronavirusTestCase(TestMixin):
         data = json.loads(response.data)
         self.assertIn("_meta", data)
 
+
+    def test_keywordsearch(self):
+        endpoint = 'index'
+        url = f"{self.base_url}/{endpoint}?"
+        headers = {'page':0, 'page_size':10}
+        payload = {'keyword':'Tennessee'}
+        params = urllib.parse.urlencode(payload)
+        response = self.client.get(url+params, headers=headers)
+        data = json.loads(response.data)
+        print(data)
