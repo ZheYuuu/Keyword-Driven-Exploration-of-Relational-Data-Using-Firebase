@@ -87,7 +87,7 @@ class MySQLDB:
                 for word in words:
                     if word=='' or self._is_number(word):
                         continue
-                    self.index[word].append({
+                    self.index[word.lower())].append({
                         'table': name,
                         'attribute':key,
                         'pk':pk
