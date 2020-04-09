@@ -3,17 +3,17 @@ from app.api import bp
 from app import db
 import urllib.parse
 from app.models import Pagination, ResultSet
+from const import daily, area, date
 
-daily = "daily_situation"
-area = "area"
-date = "statisic"
+db_name = "coronavirus"
 
 
-@bp.route("/daily_situation/", methods=["GET"], endpoint="daily_list")
+@bp.route(f"/{db_name}/{daily}/", methods=["GET"], endpoint="daily_list")
 def get_daily_release_list():
-    pagination = Pagination(daily, request.headers)()
+    ref = f"{db_name}/{daily}"
+    pagination = Pagination(ref, request.headers)()
     items = (
-        db.child(daily)
+        db.child(ref)
         .order_by_key()
         .start_at(pagination.start)
         .limit_to_first(pagination.page_size)
@@ -21,14 +21,15 @@ def get_daily_release_list():
     )
     last = next(reversed(items.val()))
     response = ResultSet(items.val(), pagination, last).response()
-    return response 
+    return response
 
 
-@bp.route("/area/", methods=["GET"], endpoint="area_list")
+@bp.route(f"/{db_name}/{area}/", methods=["GET"], endpoint="area_list")
 def get_area_list():
-    pagination = Pagination(area, request.headers)()
+    ref = f"{db_name}/{area}"
+    pagination = Pagination(ref, request.headers)()
     items = (
-        db.child(area)
+        db.child(ref)
         .order_by_key()
         .start_at(pagination.start)
         .limit_to_first(pagination.page_size)
@@ -36,14 +37,15 @@ def get_area_list():
     )
     last = next(reversed(items.val()))
     response = ResultSet(items.val(), pagination, last).response()
-    return response  
+    return response
 
 
-@bp.route("/statisic/", methods=["GET"], endpoint="date_list")
+@bp.route(f"/{db_name}/{date}/", methods=["GET"], endpoint="date_list")
 def get_statisic_list():
-    pagination = Pagination(date, request.headers)()
+    ref = f"{db_name}/{date}"
+    pagination = Pagination(ref, request.headers)()
     items = (
-        db.child(date)
+        db.child(ref)
         .order_by_key()
         .start_at(pagination.start)
         .limit_to_first(pagination.page_size)
@@ -51,19 +53,19 @@ def get_statisic_list():
     )
     last = next(reversed(items.val()))
     response = ResultSet(items.val(), pagination, last).response()
-    return response 
+    return response
 
 
-@bp.route("/daily_situation/<id>/", methods=["GET"], endpoint="daily")
+@bp.route(f"/{db_name}/{daily}/<id>/", methods=["GET"], endpoint="daily")
 def get_daily_release(id):
-    return jsonify(db.child(daily).child(id).get().val())
+    return jsonify(db.child(db_name).child(daily).child(id).get().val())
 
 
-@bp.route("/area/<id>/", methods=["GET"], endpoint="area")
+@bp.route(f"/{db_name}/{area}/<id>/", methods=["GET"], endpoint="area")
 def get_area(id):
-    return jsonify(db.child(area).child(id).get().val())
+    return jsonify(db.child(db_name).child(area).child(id).get().val())
 
 
-@bp.route("/statisic/<id>/", methods=["GET"], endpoint="date")
+@bp.route(f"/{db_name}/{date}/<id>/", methods=["GET"], endpoint="date")
 def get_statisc(id):
-    return jsonify(db.child(date).child(id).get().val())
+    return jsonify(db.child(db_name).child(date).child(id).get().val())

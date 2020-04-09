@@ -5,12 +5,15 @@ import urllib.parse
 from app.models import Pagination, ResultSet
 from const import city, country, countrylanguage
 
+db_name = "world"
 
-@bp.route("/city/", methods=["GET"], endpoint="city_list")
+
+@bp.route(f"/{db_name}/{city}/", methods=["GET"], endpoint="city_list")
 def get_city_list():
-    pagination = Pagination(city, request.headers)()
+    ref = f"{db_name}/{city}"
+    pagination = Pagination(ref, request.headers)()
     items = (
-        db.child(city)
+        db.child(ref)
         .order_by_key()
         .start_at(pagination.start)
         .limit_to_first(pagination.page_size)
@@ -21,11 +24,12 @@ def get_city_list():
     return response
 
 
-@bp.route("/country/", methods=["GET"], endpoint="country_list")
+@bp.route(f"/{db_name}/{country}/", methods=["GET"], endpoint="country_list")
 def get_station_list():
-    pagination = Pagination(country, request.headers)()
+    ref = f"{db_name}/{country}"
+    pagination = Pagination(ref, request.headers)()
     items = (
-        db.child(country)
+        db.child(ref)
         .order_by_key()
         .start_at(pagination.start)
         .limit_to_first(pagination.page_size)
@@ -36,11 +40,14 @@ def get_station_list():
     return response
 
 
-@bp.route("/countrylanguage/", methods=["GET"], endpoint="countrylanguage_list")
+@bp.route(
+    f"/{db_name}/{countrylanguage}/", methods=["GET"], endpoint="countrylanguage_list"
+)
 def get_prov_list():
-    pagination = Pagination(countrylanguage, request.headers)()
+    ref = f"{db_name}/{countrylanguage}"
+    pagination = Pagination(ref, request.headers)()
     items = (
-        db.child(countrylanguage)
+        db.child(ref)
         .order_by_key()
         .start_at(pagination.start)
         .limit_to_first(pagination.page_size)
@@ -51,16 +58,18 @@ def get_prov_list():
     return response
 
 
-@bp.route("/city/<id>/", methods=["GET"], endpoint="city")
+@bp.route(f"/{db_name}/{city}/<id>/", methods=["GET"], endpoint="city")
 def get_train(id):
-    return jsonify(db.child(city).child(id).get().val())
+    return jsonify(db.child(db_name).child(city).child(id).get().val())
 
 
-@bp.route("/country/<id>/", methods=["GET"], endpoint="country")
+@bp.route(f"/{db_name}/{country}/<id>/", methods=["GET"], endpoint="country")
 def get_station(id):
-    return jsonify(db.child(country).child(id).get().val())
+    return jsonify(db.child(db_name).child(country).child(id).get().val())
 
 
-@bp.route("/countrylanguage/<id>/", methods=["GET"], endpoint="countrylanguage")
+@bp.route(
+    f"/{db_name}/{countrylanguage}/<id>/", methods=["GET"], endpoint="countrylanguage"
+)
 def get_prov(id):
-    return jsonify(db.child(countrylanguage).child(id).get().val())
+    return jsonify(db.child(db_name).child(countrylanguage).child(id).get().val())

@@ -4,7 +4,7 @@ area = "area"
 date = "statisic"
 
 # train-module
-train = "train"
+train = "train_info"
 station = "station_info"
 prov = "prov_railway_info"
 

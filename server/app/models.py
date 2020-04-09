@@ -4,8 +4,8 @@ from app import db
 
 
 class Pagination(object):
-    def __init__(self, endpoint, *args, **kwargs):
-        items = self._get_pages(endpoint)
+    def __init__(self, ref, db_name, *args, **kwargs):
+        items = self._get_pages(ref)
         self.page = int(kwargs.get("page", 0))
         self.page_size = int(kwargs.get("page_size", 10))
         self.total_items = len(items)
@@ -14,13 +14,14 @@ class Pagination(object):
         if not self.start:
             offset = self.page * self.page_size
             self.start = items[offset]
+
     def __call__(self):
         return self
 
     @lru_cache()
-    def _get_pages(self, endpoint):
+    def _get_pages(self, ref):
         # Firebase returns unordered resultset
-        return sorted(list(db.child(endpoint).shallow().get().val()))
+        return sorted(list(db.child(ref).shallow().get().val()))
 
 
 class ResultSet(object):
@@ -42,5 +43,3 @@ class ResultSet(object):
             "_next": self.lastKey,
         }
         return jsonify(data)
-
-
