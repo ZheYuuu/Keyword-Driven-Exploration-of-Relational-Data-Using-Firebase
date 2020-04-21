@@ -9,4 +9,6 @@ blog.log*
 database.rules*
 firebase*
 *.log
+*.coverage
+tmp/
 test/
