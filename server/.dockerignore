@@ -1,0 +1,12 @@
+__pycache__/
+venv/
+.env
+app.db
+blog.log*
+.firebaserc
+database.rules*
+firebase*
+*.log
+*.coverage
+tmp/
+.gitignore
