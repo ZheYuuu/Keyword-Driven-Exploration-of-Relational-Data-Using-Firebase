@@ -4,7 +4,7 @@ from app import db
 
 
 class Pagination(object):
-    def __init__(self, ref, db_name, *args, **kwargs):
+    def __init__(self, ref, *args, **kwargs):
         items = self._get_pages(ref)
         self.page = int(kwargs.get("page", 0))
         self.page_size = int(kwargs.get("page_size", 10))
