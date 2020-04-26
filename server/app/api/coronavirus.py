@@ -11,7 +11,7 @@ db_name = "coronavirus"
 @bp.route(f"/{db_name}/{daily}/", methods=["GET"], endpoint="daily_list")
 def get_daily_release_list():
     ref = f"{db_name}/{daily}"
-    pagination = Pagination(ref, request.headers)()
+    pagination = Pagination(ref, **request.args)
     items = (
         db.child(ref)
         .order_by_key()
@@ -27,7 +27,7 @@ def get_daily_release_list():
 @bp.route(f"/{db_name}/{area}/", methods=["GET"], endpoint="area_list")
 def get_area_list():
     ref = f"{db_name}/{area}"
-    pagination = Pagination(ref, request.headers)()
+    pagination = Pagination(ref, **request.args)()
     items = (
         db.child(ref)
         .order_by_key()
@@ -43,7 +43,7 @@ def get_area_list():
 @bp.route(f"/{db_name}/{date}/", methods=["GET"], endpoint="date_list")
 def get_statisic_list():
     ref = f"{db_name}/{date}"
-    pagination = Pagination(ref, request.headers)()
+    pagination = Pagination(ref, **request.args)()
     items = (
         db.child(ref)
         .order_by_key()

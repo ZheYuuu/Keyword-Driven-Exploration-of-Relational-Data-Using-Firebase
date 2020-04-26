@@ -11,7 +11,7 @@ db_name = "world"
 @bp.route(f"/{db_name}/{city}/", methods=["GET"], endpoint="city_list")
 def get_city_list():
     ref = f"{db_name}/{city}"
-    pagination = Pagination(ref, request.headers)()
+    pagination = Pagination(ref, **request.args)()
     items = (
         db.child(ref)
         .order_by_key()
@@ -27,7 +27,7 @@ def get_city_list():
 @bp.route(f"/{db_name}/{country}/", methods=["GET"], endpoint="country_list")
 def get_station_list():
     ref = f"{db_name}/{country}"
-    pagination = Pagination(ref, request.headers)()
+    pagination = Pagination(ref, **request.args)()
     items = (
         db.child(ref)
         .order_by_key()
@@ -45,7 +45,7 @@ def get_station_list():
 )
 def get_prov_list():
     ref = f"{db_name}/{countrylanguage}"
-    pagination = Pagination(ref, request.headers)()
+    pagination = Pagination(ref, **request.args)()
     items = (
         db.child(ref)
         .order_by_key()

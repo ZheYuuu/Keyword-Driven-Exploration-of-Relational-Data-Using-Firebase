@@ -11,7 +11,7 @@ db_name = "china_train"
 @bp.route(f"/{db_name}/{train}/", methods=["GET"], endpoint="train_list")
 def get_train_list():
     ref = f"{db_name}/{train}"
-    pagination = Pagination(ref, request.headers)()
+    pagination = Pagination(ref, **request.args)()
     items = (
         db.child(ref)
         .order_by_key()
@@ -27,7 +27,7 @@ def get_train_list():
 @bp.route(f"/{db_name}/{station}/", methods=["GET"], endpoint="station_list")
 def get_station_list():
     ref = f"{db_name}/{station}"
-    pagination = Pagination(ref, request.headers)()
+    pagination = Pagination(ref, **request.args)()
     items = (
         db.child(ref)
         .order_by_key()
@@ -43,7 +43,7 @@ def get_station_list():
 @bp.route(f"/{db_name}/{prov}/", methods=["GET"], endpoint="prov_list")
 def get_prov_list():
     ref = f"{db_name}/{prov}"
-    pagination = Pagination(ref, request.headers)()
+    pagination = Pagination(ref, **request.args)()
     items = (
         db.child(ref)
         .order_by_key()
