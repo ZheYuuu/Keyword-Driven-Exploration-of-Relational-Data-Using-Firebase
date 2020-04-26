@@ -17,7 +17,7 @@ FirebaseConfig = dict(
 )
 
 
-logging.basicConfig(filename='import.log', filemode='w',
+logging.basicConfig(filename='import.log', filemode='a',
                     format='%(name)s - %(levelname)s - %(message)s')
 REP = {"-":" ",".":"", "$":"", "#":"", "[":"", "]":"", "/": " ", "'NULL'":None, "(":"", ")":"" }
 REP = dict((re.escape(k), v) for k,v in REP.items())
@@ -87,7 +87,7 @@ class MySQLDB:
                 for word in words:
                     if word=='' or self._is_number(word):
                         continue
-                    self.index[word.lower())].append({
+                    self.index[word.lower()].append({
                         'table': name,
                         'attribute':key,
                         'pk':pk
@@ -113,7 +113,7 @@ class MySQLDB:
             pri_str.append(str(x[attr]))
         key = "_".join(pri_str)
         key = PATTERN.sub(lambda x: REP[re.escape(x.group(0))], key)
-        return key
+        return key.lower()
 
     def get_tables(self):
         sql = f'show tables'

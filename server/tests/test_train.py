@@ -43,4 +43,4 @@ class TrainTestCase(TestMixin):
         params = urllib.parse.urlencode(payload)
         response = self.client.get(url+params, headers=headers)
         data = json.loads(response.data)
-        print(data)
+        self.assertGreater(len(data), 0)

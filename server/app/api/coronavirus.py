@@ -73,7 +73,7 @@ def get_statisc(id):
 
 @bp.route(f"{db_name}/index", methods=['GET'], endpoint='coronavirus_index')
 def search():
-    keywords = request.args.get('keyword').split(' ')
+    keywords = list(map(str.lower, request.args.get('keyword').split(' ')))
     ref = f"{db_name}/index"
     mapping = {kw:{} for kw in keywords}
     entrys = set()
