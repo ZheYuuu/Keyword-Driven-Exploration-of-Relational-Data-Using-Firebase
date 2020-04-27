@@ -72,6 +72,11 @@ class MySQLDB:
         data = self.cursor.fetchall()
         df = pd.DataFrame(data, columns=self.cursor.column_names)
         df["idx"] = df.apply(self._get_pri, axis=1, pri=pri)
+        # To Avoid Firebase's array coercion.
+        # https://stackoverflow.com/questions/61449625/firebase-realtime-database-automaticlly-add-an-extra-null-when-put-data
+        if name=='city':
+            df['ID'] = df.apply(lambda x:'city_'+str(x["ID"]), axis=1)
+            df['idx'] = df.apply(lambda x:'city_'+str(x["idx"]), axis=1)
         df = df.set_index("idx")
         data = df.astype(str).to_json(orient="index")
         return data
@@ -150,7 +155,7 @@ class FireBaseDB:
 
     def post_data(self, data, mydb_name):
         for key, val in data.items():
-            self.db.child(mydb_name).child(key).update(data=json.loads(val))
+            self.db.child(mydb_name).child(key).set(data=json.loads(val))
 
     def post_index(self, index, mydb_name):
         self.db.child(mydb_name).child('index').update(data=index)

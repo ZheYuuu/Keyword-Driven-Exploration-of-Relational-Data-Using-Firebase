@@ -3,6 +3,8 @@ from config import Config, FirebaseConfig
 from flask_cors import CORS
 import pyrebase
 
+# Fix pyrebase bug: double encoding url rejection
+# https://github.com/thisbejim/Pyrebase/issues/294
 def noquote(s):
     return s
 pyrebase.pyrebase.quote = noquote
