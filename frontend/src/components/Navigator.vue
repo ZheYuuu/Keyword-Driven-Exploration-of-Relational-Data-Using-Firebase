@@ -108,13 +108,11 @@
             this.data_table = data_table_map[data_table_title];
           }
         }
-        
-        // table_node.getData();
       },
 
-      onCheck(checkedKeys, info) {
-        console.log('onCheck', checkedKeys, info);
-      },
+      // onCheck(checkedKeys, info) {
+      //   console.log('onCheck', checkedKeys, info);
+      // },
     },
   };
 </script>
