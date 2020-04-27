@@ -15,40 +15,26 @@
 <script>
   // import reqwest from 'reqwest';
   import axios from 'axios';
-  const columns = [
-    {
-      title: 'Date',
-      dataIndex: 'date',
-      // sorter: true,
-      width: '20%',
-      // scopedSlots: { customRender: 'name' },
-    },
-    {
-      title: 'Area Code',
-      dataIndex: 'area_code',
-      // filters: [{ text: 'Male', value: 'male' }, { text: 'Female', value: 'female' }],
-      width: '20%',
-    },
-    {
-      title: 'Confirm',
-      dataIndex: 'confirm',
-    },
-    {
-      title: 'Death',
-      dataIndex: 'death',
-    },
-    {
-      title: 'Recover',
-      dataIndex: 'recover',
-    },
-  ];
+  
 
   export default {
+    props:["data_base", "data_table"],
+    watch: { 
+      data_table: function(newVal, oldVal) { 
+        console.log("change!", newVal, oldVal);
+        this.getData();
+      },
+      data_base: function(newVal, oldVal) { 
+        console.log("change!", newVal, oldVal);
+        this.getData();
+      }
+    },
     mounted() {
       // this.fetch();
       this.getData();
     },
     data() {
+      let columns = [];
       return {
         data: [],
         pagination: {},
@@ -57,6 +43,19 @@
       };
     },
     methods: {
+      getColumns(data) {
+        let record = data[0];
+        let columns = [];
+        for (let k in record) {
+          if (k!='uuid') {
+            columns.push({
+              title: k,
+              dataIndex: k
+            })
+          }
+        }
+        return columns;
+      },
       getRecords(res) {
         console.log('res', res);
         let items = res.data.items;
@@ -70,15 +69,23 @@
         }
         return data;
       },
+      getPath(){
+        let path = 'http://localhost:5000/api/' + this.data_base + '/' + this.data_table;
+        return path;
+      },
       getData() {
-        const path = 'http://localhost:5000/api/coronavirus/daily_situation';
+        const path = this.getPath();
         axios.get(path)
           .then((res) => {
-            const pagination = { ...this.pagination };
             const metadata = res.data._meta;
-            pagination.total = metadata.total_pages;
+            const pagination = {
+              total: metadata.total_pages,
+              current: 0,
+              pageSize: 10
+            };
             this.loading = false;
             this.data = this.getRecords(res);
+            this.columns = this.getColumns(this.data);
             this.pagination = pagination;
           })
           .catch((error) => {
@@ -101,35 +108,18 @@
       },
       fetch(params = {}) {
         this.loading = true;
-        const path = 'http://localhost:5000/api/coronavirus/daily_situation';
+        const path = this.getPath(); 'http://localhost:5000/api/coronavirus/daily_situation';
         axios.get(path, { 
           params: params,
           })
           .then((res) => {
             this.data = this.getRecords(res);
+            this.columns = this.getColumns(this.data);
             this.loading = false;
           })
           .catch((error)=>{
             console.error(error);
           });
-        // reqwest({
-        //   url: 'http://localhost:5000/api/coronavirus/daily_situation',
-        //   method: 'get',
-        //   data: {
-        //     results: 10,
-        //     ...params,
-        //   },
-        //   type: 'json',
-        // }).then(data => {
-        //   const pagination = { ...this.pagination };
-        //   // Read total count from server
-        //   // pagination.total = data.totalCount;
-        //   pagination.total = 200;
-        //   this.loading = false;
-        //   this.data = data.results;
-        //   console.log('view data', this.data);
-        //   this.pagination = pagination;
-        // });
       },
     },
   };

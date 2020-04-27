@@ -5,21 +5,18 @@
     </div>
     <div id="body">
       <navigator/>
-      <div id="seperator"></div>
-      <dataWindow/>
     </div>
   </div>
 </template>
 
 <script>
 import navigator from './components/Navigator.vue'
-import dataWindow from './components/DataWindow.vue'
 
 export default {
   name: 'App',
   components: {
     navigator,
-    dataWindow,
+    // dataWindow,
   }
 }
 </script>
@@ -51,13 +48,7 @@ export default {
 }
 
 #body {
-  display: flex;
   margin-left: 1em;
 }
 
-#seperator {
-  width: 1em;
-  border: #2c3e50 2px;
-  box-shadow: 2px;
-}
 </style>
