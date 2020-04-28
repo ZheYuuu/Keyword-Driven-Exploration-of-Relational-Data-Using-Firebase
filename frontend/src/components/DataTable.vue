@@ -1,15 +1,18 @@
 <template>
   <div>
-    <div>Database:{{data_base}} Table:{{data_table_name}}</div>
-      <a-table
-        :columns="columns"
-        :rowKey="record => record.uuid"
-        :dataSource="data"
-        :pagination="pagination"
-        :loading="loading"
-        :scroll="{ x: 1000}"
-        @change="handleTableChange"
-      >
+    <div id="table-header">
+      <p> Database: {{data_base}} </p> 
+      <p> Table: {{data_table_name}} </p>
+    </div>
+    <a-table
+      :columns="columns"
+      :rowKey="record => record.uuid"
+      :dataSource="data"
+      :pagination="pagination"
+      :loading="loading"
+      :scroll="{ x: 1000}"
+      @change="handleTableChange"
+    >
       <a slot="fk" slot-scope="text, record, tags, node" v-on:click="handleClick(text, record, tags, node)">{{ text }}</a>
     </a-table>
   </div>
@@ -61,13 +64,13 @@
       // }
     },
     mounted() {
+      this.data_table_name = this.data_table;
       if (this.entrys.length > 0) {
         // console.log("show entry!");
         this.showSearch();
       }
       else {
         // console.log("get data!");
-        this.data_table_name = this.data_table;
         this.getData();
       }
       
@@ -246,13 +249,13 @@
       showSearch() {
         this.loading = true;
         let data = [];
-        // console.warn("show entrys", this.entrys);
+        console.warn("show entrys", this.entrys);
         for (let entry of this.entrys) {
           let path = this.getPath(entry);
           // console.warn("shw path", path);
           axios.get(path)
           .then((res) => {
-            // console.log('entry', res);
+            console.log('entry', res);
             res.data['uuid'] = entry;
             data.push(res.data);
             // console.warn('data', data);
@@ -278,8 +281,14 @@
 </script>
 
 <style scoped>
-  /* .is-pk {
-    font-weight:bold; 
-    text-decoration-line: underline;
-  } */
+ #table-header p {
+    font-size: large;
+    text-align: left;
+    margin: 0 40px 30px 0;
+    display: inline;
+ }
+ #table-header {
+  float: left;
+  margin: 10px 0 ;
+ }
 </style>

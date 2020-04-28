@@ -80,6 +80,7 @@ export default {
                             entrys: table_entrys[table_name]
                         }
                         this.tables.push(table);
+                        break;
                     }
                     console.log("tables", this.tables);
                 })
