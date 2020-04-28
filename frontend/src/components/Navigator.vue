@@ -67,7 +67,7 @@
       data_base: "coronavirus",
       data_table_map: {
         "Daily Release": "daily_situation",
-        "Coronavirus": "statisic",
+        "Coronavirus": "statistic",
         "Area": "area",
       }
     },
