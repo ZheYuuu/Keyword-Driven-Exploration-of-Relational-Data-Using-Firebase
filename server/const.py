@@ -1,7 +1,7 @@
 # coronavirus-module
 daily = "daily_situation"
 area = "area"
-date = "statisic"
+date = "statistic"
 
 # train-module
 train = "train_info"

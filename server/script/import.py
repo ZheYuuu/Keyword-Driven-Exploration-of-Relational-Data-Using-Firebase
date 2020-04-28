@@ -16,12 +16,19 @@ FirebaseConfig = dict(
     storageBucket = 'https://inf551-b0e88.appspot.com' ,
 )
 
-
+import datetime
 logging.basicConfig(filename='import.log', filemode='a',
                     format='%(name)s - %(levelname)s - %(message)s')
 REP = {"-":" ",".":"", "$":"", "#":"", "[":"", "]":"", "/": " ", "'NULL'":None, "(":"", ")":"" }
 REP = dict((re.escape(k), v) for k,v in REP.items())
 PATTERN = re.compile("|".join(REP.keys()))
+
+def validate(date_text):
+    try:
+        datetime.datetime.strptime(date_text, '%Y-%m-%d')
+        return True
+    except:
+        return False
 
 class MySQLDB:
     def __init__(self, config):
@@ -71,12 +78,15 @@ class MySQLDB:
         self.cursor.execute(sql)
         data = self.cursor.fetchall()
         df = pd.DataFrame(data, columns=self.cursor.column_names)
+
         df["idx"] = df.apply(self._get_pri, axis=1, pri=pri)
         # To Avoid Firebase's array coercion.
         # https://stackoverflow.com/questions/61449625/firebase-realtime-database-automaticlly-add-an-extra-null-when-put-data
-        if name=='city':
-            df['ID'] = df.apply(lambda x:'city_'+str(x["ID"]), axis=1)
-            df['idx'] = df.apply(lambda x:'city_'+str(x["idx"]), axis=1)
+        if name=='city' or name=='train_info':
+            col = df.apply(lambda x:f'{name}_'+str(x["ID"]), axis=1)
+            df['ID'] = col
+            df['idx'] = col 
+        
         df = df.set_index("idx")
         data = df.astype(str).to_json(orient="index")
         return data
@@ -115,10 +125,12 @@ class MySQLDB:
     def _get_pri(self, x, pri):
         pri_str = []
         for idx, attr in pri:
-            pri_str.append(str(x[attr]))
-        key = "_".join(pri_str)
-        key = PATTERN.sub(lambda x: REP[re.escape(x.group(0))], key)
-        return key.lower()
+            key = str(x[attr])
+            if validate(key):
+                pri_str.append(str(x[attr]))
+            else:
+                pri_str.append(PATTERN.sub(lambda x: REP[re.escape(x.group(0))], key))
+        return "_".join(pri_str).lower()
 
     def get_tables(self):
         sql = f'show tables'
