@@ -34,8 +34,8 @@
         icon: 'database',
       },
       children: [
-        { title: 'Daily Release', key: '0-1-0', slots: { icon: 'table' } },
-        { title: 'Coronavirus', key: '0-1-1', scopedSlots: { icon: 'table' } },
+        { title: 'Daily Situation', key: '0-1-0', slots: { icon: 'table' } },
+        { title: 'Statistic', key: '0-1-1', scopedSlots: { icon: 'table' } },
         { title: 'Area', key: '0-1-2', scopedSlots: { icon: 'table' } },
       ],
     },
@@ -66,8 +66,8 @@
     "CoronaVirus": {
       data_base: "coronavirus",
       data_table_map: {
-        "Daily Release": "daily_situation",
-        "Coronavirus": "statistic",
+        "Daily Situation": "daily_situation",
+        "Statistic": "statistic",
         "Area": "area",
       }
     },
