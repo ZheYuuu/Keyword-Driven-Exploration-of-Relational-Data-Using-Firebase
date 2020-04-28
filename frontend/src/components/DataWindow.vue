@@ -2,7 +2,7 @@
     <div id="databody">
         <div id="search-word">Search Keyword</div>
         <a-input-search placeholder="input search text" @search="onSearch" enterButton ref="search_box" v-model="search_input"/>
-        <dataTable v-bind:key="table.data_table" v-bind:data_base="table.data_base" v-bind:data_table="table.data_table" v-bind:keyword="table.keyword" v-bind:entrys="table.entrys" v-for="table in tables"/>
+        <dataTable v-bind:key="table.data_table+table.keyword" v-bind:data_base="table.data_base" v-bind:data_table="table.data_table" v-bind:keyword="table.keyword" v-bind:entrys="table.entrys" v-for="table in tables"/>
     </div>
 </template>
 
@@ -69,7 +69,7 @@ export default {
             let path = 'http://54.219.171.61:5000/api/' + this.data_base + '/index?keyword=' + value;
             axios.get(path)
                 .then((res) => {
-                    // console.log(res);
+                    console.log(res);
                     this.tables = [];
                     let table_entrys = this.sortData(res.data);
                     for (let table_name in table_entrys) {
@@ -80,9 +80,9 @@ export default {
                             entrys: table_entrys[table_name]
                         }
                         this.tables.push(table);
-                        break;
                     }
-                    console.log("tables", this.tables);
+                    // this.$forceUpdate()
+                    // console.log("tables!!", this.tables);
                 })
                 .catch((error) => {
                     console.error(error);

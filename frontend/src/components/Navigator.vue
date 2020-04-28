@@ -85,6 +85,7 @@
     data() {
       let data_base = "world";
       let data_table = "city";
+      // let shift = false;
       return {
         treeData,
         data_base,
@@ -106,6 +107,7 @@
           if (data_table_title in data_table_map) {
             this.data_base = data_base_map[data_base_title]["data_base"];
             this.data_table = data_table_map[data_table_title];
+            // this.shift = !this.shift;
           }
         }
       },

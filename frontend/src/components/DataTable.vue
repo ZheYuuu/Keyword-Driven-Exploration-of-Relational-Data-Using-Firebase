@@ -66,11 +66,11 @@
     mounted() {
       this.data_table_name = this.data_table;
       if (this.entrys.length > 0) {
-        // console.log("show entry!");
+        console.log("show entry!");
         this.showSearch();
       }
       else {
-        // console.log("get data!");
+        console.log("get data!");
         this.getData();
       }
       
@@ -133,18 +133,24 @@
           });
           key_set.push(pk);
         }
+        // console.log(1, columns);
         // add fk
         for (let fk in fk_map[table]) {
           // if it is also a pk
           if (key_set.indexOf(fk) != -1) {
+            // console.log(1, fk)
             for (let i = 0; i < columns.length; i++) {
               if(columns[i]['title'] == fk) {
-                columns[i]['scopeSlots'] = { customRender: 'fk' };
+                columns[i] = {
+                  title: fk,
+                  dataIndex: fk,
+                  scopedSlots: { customRender: 'fk' },
+                };
               }
             }
           }
           else {
-            console.log(fk);
+            // console.log(fk);
             columns.push({
               title: fk,
               dataIndex: fk,
@@ -153,7 +159,7 @@
             key_set.push(fk);
           }
         }
-
+        // console.log(2, columns);
         for (let k in record) {
           if (key_set.indexOf(k) == -1) {
               columns.push({
@@ -162,7 +168,7 @@
               });
           }
         }
-        console.log("columns", columns);
+        // console.log("columns3", columns);
         return columns;
       },
       getRecords(res) {
