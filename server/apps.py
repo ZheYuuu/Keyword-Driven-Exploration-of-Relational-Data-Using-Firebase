@@ -4,7 +4,6 @@ import os
 import sys
 
 app = create_app()
-
 @app.shell_context_processor
 def makeShellContext():
     return {'db':db}

@@ -25,7 +25,7 @@ def get_city_list():
 
 
 @bp.route(f"/{db_name}/{country}/", methods=["GET"], endpoint="country_list")
-def get_station_list():
+def get_country_list():
     ref = f"{db_name}/{country}"
     pagination = Pagination(ref, **request.args)()
     items = (
@@ -43,7 +43,7 @@ def get_station_list():
 @bp.route(
     f"/{db_name}/{countrylanguage}/", methods=["GET"], endpoint="countrylanguage_list"
 )
-def get_prov_list():
+def get_countrylanguage_list():
     ref = f"{db_name}/{countrylanguage}"
     pagination = Pagination(ref, **request.args)()
     items = (
@@ -59,21 +59,20 @@ def get_prov_list():
 
 
 @bp.route(f"/{db_name}/{city}/<id>/", methods=["GET"], endpoint="city")
-def get_train(id):
+def get_city(id):
     return jsonify(db.child(db_name).child(city).child(id).get().val())
 
 
 @bp.route(f"/{db_name}/{country}/<id>/", methods=["GET"], endpoint="country")
-def get_station(id):
+def get_country(id):
     return jsonify(db.child(db_name).child(country).child(id).get().val())
 
 
 @bp.route(
     f"/{db_name}/{countrylanguage}/<id>/", methods=["GET"], endpoint="countrylanguage"
 )
-def get_prov(id):
+def get_countrylanguage(id):
     return jsonify(db.child(db_name).child(countrylanguage).child(id).get().val())
-
 
 @bp.route(f"{db_name}/index", methods=["GET"], endpoint="world_index")
 def search():

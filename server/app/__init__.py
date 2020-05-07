@@ -2,6 +2,7 @@ from flask import Flask
 from config import Config, FirebaseConfig
 from flask_cors import CORS
 import pyrebase
+import logging
 
 # Fix pyrebase bug: double encoding url rejection
 # https://github.com/thisbejim/Pyrebase/issues/294
@@ -11,6 +12,8 @@ pyrebase.pyrebase.quote = noquote
 
 def create_app(config_class=Config):
     app = Flask(__name__)
+    # app.debug=True
+    
     app.config.from_object(config_class)
 
     # Enable CORS
